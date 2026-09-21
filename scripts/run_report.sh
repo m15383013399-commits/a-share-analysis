@@ -2,12 +2,12 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PYTHON_BIN="$ROOT_DIR/.venv/bin/python"
 cd "$ROOT_DIR"
-
-if [[ ! -x "$PYTHON_BIN" ]]; then
-  echo "Missing .venv. Run: bash scripts/setup_venv.sh" >&2
-  exit 2
+if [[ -n "${ASHARE_PYTHON:-}" ]]; then
+  PYTHON_BIN="$ASHARE_PYTHON"
+elif [[ -x "$ROOT_DIR/.venv/bin/python" ]]; then
+  PYTHON_BIN="$ROOT_DIR/.venv/bin/python"
+else
+  PYTHON_BIN="$(command -v python3)"
 fi
-
 exec "$PYTHON_BIN" "$ROOT_DIR/scripts/run_daily_report.py" "$@"
