@@ -1,0 +1,74 @@
+{
+  "report_name": "A股市场日报",
+  "timezone": "Asia/Shanghai",
+  "output_dir": "reports",
+  "raw_data_dir": "data/raw",
+  "snapshot_dir": "data/snapshots",
+  "forecast_dir": "data/forecasts",
+  "evaluation_detail_path": "data/evaluations/evaluations.jsonl",
+  "evaluation_summary_path": "data/evaluations/summary.json",
+  "calendar_path": "config/trading_calendar_2026.json",
+  "min_stock_count": 5000,
+  "flat_threshold": 0.30,
+  "stability_index_code": "000001",
+  "index_pct_tolerance": 0.05,
+  "index_level_tolerance_pct": 0.05,
+  "watch_codes": [
+    "601899",
+    "600760",
+    "002458",
+    "300274",
+    "300502"
+  ],
+  "market_data": {
+    "timeout_seconds": 8,
+    "index_sources": [
+      "tencent",
+      "akshare"
+    ],
+    "breadth_sources": [
+      "sina",
+      "akshare"
+    ],
+    "sector_sources": [
+      "eastmoney",
+      "sina"
+    ],
+    "required_index_codes": [
+      "000001",
+      "399001",
+      "399006",
+      "000688",
+      "000905",
+      "000300"
+    ]
+  },
+  "board_top_n": 10,
+  "stock_top_n": 20,
+  "news_top_n": 12,
+  "include_news": true,
+  "news_keywords": [
+    "A股",
+    "政策",
+    "人工智能",
+    "机器人",
+    "半导体",
+    "算力",
+    "新能源",
+    "消费",
+    "地产",
+    "券商",
+    "并购",
+    "低空经济"
+  ],
+  "providers": {
+    "akshare": {
+      "enabled": true,
+      "timeout_seconds": 6
+    },
+    "tushare": {
+      "enabled": false,
+      "token_env": "TUSHARE_TOKEN"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "trade_date": "2026-08-12",
+  "generated_at": "2026-08-12T15:05:00+08:00",
+  "market_status": "ready",
+  "quality_status": "passed",
+  "sources": {},
+  "indices": [
+    {"code": "399006", "name": "创业板指", "trade_date": "2026-08-12", "pct": 0.34},
+    {"code": "000688", "name": "科创50", "trade_date": "2026-08-12", "pct": -0.20},
+    {"code": "000905", "name": "中证500", "trade_date": "2026-08-12", "pct": 0.80},
+    {"code": "000300", "name": "沪深300", "trade_date": "2026-08-12", "pct": 1.00}
+  ],
+  "breadth": {"counts": {"up": 3, "down": 1, "flat": 1, "total": 5}},
+  "sectors": {
+    "industries": [
+      {"code": "BK0475", "name": "有色金属", "trade_date": "2026-08-12", "pct": 1.50},
+      {"code": "BK0481", "name": "国防军工", "trade_date": "2026-08-12", "pct": -0.25}
+    ],
+    "concepts": [
+      {"code": "BK0477", "name": "光伏设备", "trade_date": "2026-08-12", "pct": 0.00}
+    ]
+  },
+  "stocks": [
+    {"code": "601899", "name": "紫金矿业", "trade_date": "2026-08-12", "status": "active", "previous_close": 10.00, "close": 10.50, "pct": 99.00},
+    {"code": "600760", "name": "中航沈飞", "trade_date": "2026-08-12", "status": "active", "previous_close": 20.00, "close": 19.00, "pct": 99.00},
+    {"code": "002458", "name": "益生股份", "trade_date": "2026-08-12", "status": "active", "previous_close": 8.00, "close": 8.00, "pct": 99.00},
+    {"code": "300618", "name": "寒锐钴业", "trade_date": "2026-08-12", "status": "active", "previous_close": 16.00, "close": 16.80, "pct": 99.00},
+    {"code": "600547", "name": "山东黄金", "trade_date": "2026-08-12", "status": "active", "previous_close": 40.00, "close": 40.40, "pct": 99.00}
+  ],
+  "warnings": []
+}

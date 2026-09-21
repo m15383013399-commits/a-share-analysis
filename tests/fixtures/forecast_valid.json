@@ -1,0 +1,165 @@
+{
+  "trade_date": "2026-08-11",
+  "next_trade_date": "2026-08-12",
+  "indices": [
+    {
+      "code": "399006",
+      "name": "创业板指",
+      "lower": -1.8,
+      "upper": 1.2,
+      "probabilities": {"up": 30, "flat": 45, "down": 25},
+      "week_range": "-3.0% to +2.5%",
+      "invalidation": "成交额明显放大"
+    },
+    {
+      "code": "000688",
+      "name": "科创50",
+      "lower": -2.0,
+      "upper": 1.6,
+      "probabilities": {"up": 28, "flat": 42, "down": 30},
+      "week_range": "-3.5% to +3.0%",
+      "invalidation": "芯片板块放量转强"
+    },
+    {
+      "code": "000905",
+      "name": "中证500",
+      "lower": -0.8,
+      "upper": 1.2,
+      "probabilities": {"up": 35, "flat": 45, "down": 20},
+      "week_range": "-2.0% to +2.5%",
+      "invalidation": "小盘股宽度走弱"
+    },
+    {
+      "code": "000300",
+      "name": "沪深300",
+      "lower": -0.7,
+      "upper": 0.9,
+      "probabilities": {"up": 32, "flat": 48, "down": 20},
+      "week_range": "-1.8% to +2.0%",
+      "invalidation": "权重股资金显著流出"
+    }
+  ],
+  "sectors": [
+    {
+      "code": "BK0475",
+      "name": "有色金属",
+      "probabilities": {"up": 45, "flat": 35, "down": 20},
+      "catalyst": "商品价格偏强",
+      "crowding": "medium",
+      "invalidation": "商品价格快速回落"
+    },
+    {
+      "code": "BK0481",
+      "name": "国防军工",
+      "probabilities": {"up": 40, "flat": 40, "down": 20},
+      "catalyst": "行业订单预期",
+      "crowding": "low",
+      "invalidation": "板块量价背离"
+    },
+    {
+      "code": "BK0477",
+      "name": "光伏设备",
+      "probabilities": {"up": 38, "flat": 37, "down": 25},
+      "catalyst": "产业链价格修复",
+      "crowding": "medium",
+      "invalidation": "龙头跌破支撑"
+    }
+  ],
+  "watch_pool": [
+    {
+      "code": "601899",
+      "name": "紫金矿业",
+      "lower": -2.5,
+      "upper": 3.5,
+      "week_view": "震荡偏强",
+      "watch_condition": "金价与成交量共振",
+      "status": "active",
+      "factors": {
+        "fundamental_catalyst": {"state": "positive", "conclusion": "金铜价格提供支撑"},
+        "industry_cycle": {"state": "positive", "conclusion": "有色周期仍偏上行"},
+        "liquidity": {"state": "neutral", "conclusion": "近期成交保持稳定"},
+        "technical_structure": {"state": "neutral", "conclusion": "价格位于区间中部"},
+        "valuation": {"state": "neutral", "conclusion": "估值处于历史中位"},
+        "risk": {"state": "negative", "conclusion": "需防范商品价格回调"}
+      }
+    },
+    {
+      "code": "600760",
+      "name": "中航沈飞",
+      "lower": -2.5,
+      "upper": 3.5,
+      "week_view": "震荡",
+      "watch_condition": "军工板块放量",
+      "status": "active",
+      "factors": {
+        "fundamental_catalyst": {"state": "positive", "conclusion": "订单预期提供支撑"},
+        "industry_cycle": {"state": "neutral", "conclusion": "行业需求相对稳定"},
+        "liquidity": {"state": "neutral", "conclusion": "成交活跃度一般"},
+        "technical_structure": {"state": "neutral", "conclusion": "仍在整理区间"},
+        "valuation": {"state": "negative", "conclusion": "估值缺少安全边际"},
+        "risk": {"state": "neutral", "conclusion": "关注订单兑现节奏"}
+      }
+    },
+    {
+      "code": "002458",
+      "name": "益生股份",
+      "lower": -4.0,
+      "upper": 6.0,
+      "week_view": "高波动",
+      "watch_condition": "种禽价格回暖",
+      "status": "active",
+      "factors": {
+        "fundamental_catalyst": {"state": "positive", "conclusion": "产品价格有修复预期"},
+        "industry_cycle": {"state": "positive", "conclusion": "养殖周期低位回暖"},
+        "liquidity": {"state": "negative", "conclusion": "小盘股流动性波动较大"},
+        "technical_structure": {"state": "positive", "conclusion": "短线结构偏强"},
+        "valuation": {"state": "neutral", "conclusion": "周期估值参考有限"},
+        "risk": {"state": "negative", "conclusion": "关注产品价格反复"}
+      }
+    },
+    {
+      "code": "300618",
+      "name": "寒锐钴业",
+      "lower": -5.0,
+      "upper": 6.0,
+      "week_view": "偏强但波动大",
+      "watch_condition": "钴价企稳",
+      "status": "active",
+      "factors": {
+        "fundamental_catalyst": {"state": "positive", "conclusion": "钴价为盈利提供弹性"},
+        "industry_cycle": {"state": "neutral", "conclusion": "行业处于修复阶段"},
+        "liquidity": {"state": "neutral", "conclusion": "成交额可支撑正常交易"},
+        "technical_structure": {"state": "positive", "conclusion": "短线趋势尚未破坏"},
+        "valuation": {"state": "neutral", "conclusion": "估值取决于金属价格"},
+        "risk": {"state": "negative", "conclusion": "商品价格波动风险高"}
+      }
+    },
+    {
+      "code": "600547",
+      "name": "山东黄金",
+      "lower": -3.0,
+      "upper": 4.0,
+      "week_view": "震荡偏强",
+      "watch_condition": "黄金价格保持强势",
+      "status": "active",
+      "factors": {
+        "fundamental_catalyst": {"state": "positive", "conclusion": "黄金价格支撑盈利"},
+        "industry_cycle": {"state": "positive", "conclusion": "贵金属景气度偏高"},
+        "liquidity": {"state": "neutral", "conclusion": "大盘股流动性稳定"},
+        "technical_structure": {"state": "neutral", "conclusion": "价格震荡整理"},
+        "valuation": {"state": "neutral", "conclusion": "估值反映部分金价预期"},
+        "risk": {"state": "negative", "conclusion": "美元反弹可能压制金价"}
+      }
+    }
+  ],
+  "changes": {
+    "exited": [],
+    "entered": [],
+    "reason": "initial_pool"
+  },
+  "sources": [
+    "https://qt.gtimg.cn/",
+    "https://quote.eastmoney.com/"
+  ],
+  "disclaimer": "不构成投资建议"
+}

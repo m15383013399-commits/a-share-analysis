@@ -1,0 +1,24 @@
+name: a-share-analysis
+services:
+  web:
+    image: a-share-analysis:local
+    build: .
+    ports:
+      - "127.0.0.1:3090:3090"
+    volumes:
+      - ./runtime:/app/runtime
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:3090/api/health', timeout=3)"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+  worker:
+    image: a-share-analysis:local
+    command: ["python", "-m", "backend.worker"]
+    volumes:
+      - ./runtime:/app/runtime
+    depends_on:
+      web:
+        condition: service_healthy
+    restart: unless-stopped

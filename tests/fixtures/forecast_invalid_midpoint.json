@@ -1,0 +1,19 @@
+{
+  "trade_date": "2026-08-11",
+  "next_trade_date": "2026-08-12",
+  "indices": [
+    {"code": "399006", "name": "创业板指", "lower": -1.8, "upper": 1.2, "midpoint": 9.9, "probabilities": {"up": 50, "flat": 40, "down": 20}},
+    {"code": "000688", "name": "科创50", "lower": -2.0, "upper": 1.6, "probabilities": {"up": 28, "flat": 42, "down": 30}},
+    {"code": "000905", "name": "中证500", "lower": -0.8, "upper": 1.2, "probabilities": {"up": 35, "flat": 45, "down": 20}},
+    {"code": "000300", "name": "沪深300", "lower": -0.7, "upper": 0.9, "probabilities": {"up": 32, "flat": 48, "down": 20}}
+  ],
+  "sectors": [
+    {"code": "BK0475", "name": "有色金属", "probabilities": {"up": 45, "flat": 35, "down": 20}},
+    {"code": "BK0481", "name": "国防军工", "probabilities": {"up": 40, "flat": 40, "down": 20}},
+    {"code": "BK0477", "name": "光伏设备", "probabilities": {"up": 38, "flat": 37, "down": 25}}
+  ],
+  "watch_pool": [],
+  "changes": {"exited": [], "entered": []},
+  "sources": ["https://qt.gtimg.cn/"],
+  "disclaimer": "不构成投资建议"
+}

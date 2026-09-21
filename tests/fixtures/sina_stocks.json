@@ -1,0 +1,13 @@
+[
+  [
+    {"symbol": "sh600000", "code": "600000", "name": "浦发银行", "trade": "10.20", "settlement": "10.00", "changepercent": "2.0", "amount": "100000000", "ticktime": "15:00:00"},
+    {"symbol": "sh600001", "code": "600001", "name": "邯郸钢铁", "trade": "8.00", "settlement": "8.10", "changepercent": "-1.234568", "amount": "200000000", "ticktime": "15:00:00"},
+    {"symbol": "sz000001", "code": "000001", "name": "平安银行", "trade": "12.00", "settlement": "12.00", "changepercent": "0", "amount": "90000000", "ticktime": "15:00:00"},
+    {"symbol": "sz000002", "code": "000002", "name": "万科A", "trade": "15.15", "settlement": "15.00", "changepercent": "1.0", "amount": "110000000", "ticktime": "15:00:00"}
+  ],
+  [
+    {"symbol": "sz000001", "code": "000001", "name": "平安银行", "trade": "12.00", "settlement": "12.00", "changepercent": "0", "amount": "90000000", "ticktime": "15:00:00"},
+    {"symbol": "sz300001", "code": "300001", "name": "特锐德", "trade": "20.50", "settlement": "21.00", "changepercent": "-2.380952", "amount": "50000000", "ticktime": "15:00:00"},
+    {"symbol": "bj430001", "code": "430001", "name": "北交样本", "trade": "6.00", "settlement": "5.90", "changepercent": "1.694915", "amount": "70000000", "ticktime": "15:00:00"}
+  ]
+]
