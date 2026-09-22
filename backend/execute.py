@@ -167,10 +167,10 @@ def research(task_id,payload):
             if cli(task_id,['--forecast-file',str(run/'forecast-draft.json')],cfg)!=0:
                 status='草稿：正式预测登记失败（可能同日已存在不同预测）'
             else:status='正式预测已入账'
-    elif formal:status='草稿：修订后尚需再次审阅，未入账'
+    elif output['review_status']!='passed':status='草稿：修订后尚需再次审阅，未入账'
     evidence=context['evidence'];g=evidence.get('gold',{})
     incomplete=mode=='close' and (not g.get('xauusd',{}).get('records') or any(evidence.get('stock_'+code,{}).get(part,{}).get('status')!='available' for code in codes for part in ['history','financials','news']))
-    report={'id':task_id,'date':as_of,'mode':mode,'code':payload.get('code'),'status':status,'created_at':state.now(),'data_hash':context['snapshot_hash'],'output':output,'context':context,'incomplete':incomplete,'limitations':context['limitations'],'markdown':render_report(output,context,status)}
+    report={'engine':state.read(state.RUNTIME/'runs'/task_id/'engine.json',{}).get('analysis_engine','api'),'id':task_id,'date':as_of,'mode':mode,'code':payload.get('code'),'status':status,'created_at':state.now(),'data_hash':context['snapshot_hash'],'output':output,'context':context,'incomplete':incomplete,'limitations':context['limitations'],'markdown':render_report(output,context,status)}
     atomic_write_json(state.RUNTIME/'reports'/f'{task_id}.json',report)
     atomic_write_text(state.RUNTIME/'reports'/f'{task_id}.md',report['markdown'])
     state.update(task_id,status='degraded' if '草稿' in status or incomplete else 'succeeded',stage='分析完成',result={'report_id':task_id,'publication':status,'incomplete':incomplete})
@@ -196,6 +196,11 @@ def execute(task_id):
         elif t['kind']=='gold':
             r=collect_gold(task_id);state.update(task_id,status='succeeded' if all(r[k]['status']=='available' for k in ['xauusd','au9999']) else 'degraded',stage='黄金资料采集完成',result=r)
         elif t['kind']=='research':research(task_id,p)
+        elif t['kind']=='enginecheck':
+            from backend.research import call_model
+            result=call_model(task_id,'connection',[{'role':'user','content':'这是分析引擎连通测试。不读取文件、不执行命令、不调用工具。只返回 JSON 对象 {"ok":true}。'}])
+            if result.get('ok') is not True:raise ValueError('引擎返回不符合预期')
+            state.update(task_id,status='succeeded',stage='分析引擎测试通过',result={'engine':state.settings()['analysis_engine']})
         elif t['kind']=='demo':demo(task_id)
         else:raise ValueError('未知任务类型')
     except Exception as exc:

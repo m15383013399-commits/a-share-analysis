@@ -76,3 +76,32 @@ npm run build --prefix frontend
 计划与技术说明见 [docs/PLAN.md](docs/PLAN.md)。当前不提供货币费用硬上限、完整历史可见时间数据或自动跨年日历。
 
 不构成投资建议。
+
+## 使用本机 Codex CLI 分析
+
+设置 → 分析引擎 → **本机 Codex CLI** → 保存。原来的模型 API 模式仍然可用。CLI 模式不需要在平台填写模型 API Key；使用 Mac 上 `codex login` 的登录状态和相应额度，仍需联网。
+
+首次在 Mac 上安装本机执行服务（已验证 Codex CLI 0.135.0）：
+
+```bash
+codex login
+.venv/bin/python scripts/codex_service.py install
+```
+
+这是当前用户的 LaunchAgent，登录 Mac 时自动启动。平台原有 Docker 启停方式和 **3090** 端口不变；`web`、`worker` 继续留在 Docker，本机执行服务负责调用 CLI。不添加网络端口，不把 `~/.codex` 或 Docker socket 挂载到容器。
+
+设置里会显示“本机 Codex 已就绪”。“测试已保存的分析引擎”发起一次简短真实请求，成功或失败记录在任务列表；它也消耗所选服务的额度。先保存修改，再测试。Codex 模型留空使用 CLI 内置默认模型，也可填当前账号支持的模型名。
+
+进程使用独立临时目录、只读沙箱及结构化输出；不加载个人 config.toml、插件、Hooks 和项目指令，禁用 shell、浏览器和多代理等工具。只把冻结的研究证据传给 Codex，结果仍通过原有校验及预测登记流程。CLI 不采用 API 模式的输出 Token 参数，以单次时间、任务总时间和调用次数限制执行；实际用量写入本地步骤记录。
+
+任务文件通过已挂载的 `runtime/codex_bridge/` 交换。取消任务立即请求终止；容器停止导致租约失效，本机进程在约 15 秒内发现并终止（强制结束最多再需 3 秒）。本机服务崩溃后不会自动重复已开始的请求，平台可以手动重试；已发生的调用仍可能消耗额度。休眠期间无法持续执行。
+
+维护命令：
+
+```bash
+.venv/bin/python scripts/codex_service.py status
+.venv/bin/python scripts/codex_service.py uninstall
+# 更换项目目录、Python 或 CLI 安装位置后，重新运行 install。
+```
+
+其他系统可在宿主机保持 `python -m backend.codex_host` 运行，并让服务与容器使用同一个 runtime 目录。Codex 登录与鉴权问题应在宿主机解决，不要把登录文件复制到镜像。新的安装默认仍为 API 模式，现有配置通过默认值兼容。

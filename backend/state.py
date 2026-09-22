@@ -8,6 +8,7 @@ from market_diary.storage import atomic_write_json
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME = Path(os.environ.get('ASHARE_RUNTIME', ROOT / 'runtime')).resolve()
+ENGINE_DEFAULTS = {'analysis_engine':'api','codex_model':'','codex_timeout':600}
 TZ = ZoneInfo('Asia/Shanghai')
 TERMINAL = {'succeeded','degraded','failed','cancelled','interrupted','waiting_close','skipped_closed'}
 
@@ -63,7 +64,7 @@ def password_hash(password,salt):
 def authenticate(password):
     a=read(RUNTIME/'auth.json');return hmac.compare_digest(password_hash(password,a['salt']),a['hash'])
 def settings(public=False):
-    s=read(RUNTIME/'settings.json',{})
+    s={**ENGINE_DEFAULTS, **read(RUNTIME/'settings.json',{})}
     if public:
         for key in ['api_key','gold_api_key']:
             s[key+'_configured']=bool(s.pop(key,''))

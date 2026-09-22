@@ -66,6 +66,9 @@ def session():return {'username':'admin'}
 def health():return {'status':'ok','service':'a-share-analysis'}
 
 class Settings(BaseModel):
+    analysis_engine:str=Field(default='api',pattern='^(api|codex_cli)$')
+    codex_model:str=Field(default='',max_length=100,pattern=r'^([A-Za-z0-9][A-Za-z0-9._/-]{0,99})?$')
+    codex_timeout:int=Field(default=600,ge=30,le=900)
     model_base_url:str=Field(max_length=300)
     model_name:str=Field(min_length=1,max_length=100)
     api_key:str=Field(default='',max_length=500)
@@ -91,12 +94,14 @@ class Settings(BaseModel):
         if len(set(v))!=5 or any(not re.fullmatch(r'\d{6}',x) for x in v):raise ValueError('需要五个不重复的六位股票代码')
         return v
 @app.get('/api/settings',dependencies=[Depends(require_session)])
-def settings():return state.settings(public=True)
+def settings():
+    from backend.codex_bridge import status
+    return {**state.settings(public=True),'codex_status':status()}
 @app.put('/api/settings',dependencies=[Depends(require_session)])
 def save_settings(body:Settings):state.update_settings(body.model_dump());return state.settings(public=True)
 
 class TaskRequest(BaseModel):
-    kind:str=Field(pattern='^(collect|research|supplement|gold|demo)$')
+    kind:str=Field(pattern='^(collect|research|supplement|gold|demo|enginecheck)$')
     date:str=Field(default_factory=state.today)
     mode:str=Field(default='close',pattern='^(close|instrument)$')
     asset_type:str=Field(default='stock',pattern='^(stock|index)$')
@@ -109,7 +114,13 @@ class TaskRequest(BaseModel):
 @app.post('/api/tasks',dependencies=[Depends(require_session)])
 def start_task(body:TaskRequest):
     if (body.kind=='supplement' or (body.kind=='research' and body.mode=='instrument')) and not body.code:raise HTTPException(422,'请填写六位标的代码')
-    if body.kind=='research' and not state.settings().get('api_key'):raise HTTPException(409,'尚未配置模型密钥；可先采集数据或运行离线演示')
+    if body.kind in {'research','enginecheck'}:
+        s=state.settings()
+        if s['analysis_engine']=='api' and not s.get('api_key'):raise HTTPException(409,'尚未配置模型密钥；可先采集数据或运行离线演示')
+        if s['analysis_engine']=='codex_cli':
+            from backend.codex_bridge import status
+            health=status()
+            if not health['ready']:raise HTTPException(409,health['message'])
     payload=body.model_dump(exclude={'kind'})
     return {'id':state.enqueue(body.kind,payload)}
 @app.get('/api/tasks',dependencies=[Depends(require_session)])
@@ -141,6 +152,8 @@ def overview():
     paths=sorted((state.RUNTIME/'snapshots').glob('*.json'));snap=state.read(paths[-1]) if paths else None
     heartbeat=state.RUNTIME/'worker-heartbeat';worker=heartbeat.exists() and time.time()-heartbeat.stat().st_mtime<15
     calendar=load_calendar(state.ROOT/'config/trading_calendar_2026.json')
+    from backend.codex_bridge import status
+    engine_settings=state.settings(public=True);codex_status=status()
     today=state.today();missing=[]
     if paths:
         from datetime import timedelta
@@ -148,7 +161,7 @@ def overview():
         while day<=date.fromisoformat(today) and day.year==calendar['year']:
             if is_trade_day(day,calendar) and not (state.RUNTIME/'snapshots'/f'{day}.json').exists():missing.append(str(day))
             day+=timedelta(days=1)
-    return {'today':today,'snapshot_date':snap.get('trade_date') if snap else None,'snapshot_count':len(paths),'forecast_count':len(list((state.RUNTIME/'forecasts').glob('*.json'))),'indices':snap.get('indices',[]) if snap else [],'breadth':snap.get('breadth',{}) if snap else {},'quality_status':snap.get('quality_status') if snap else None,'worker_online':worker,'calendar_year':calendar['year'],'missing_dates':missing,'summary':state.read(state.RUNTIME/'evaluations/summary.json',{}),'model_configured':state.settings(public=True).get('api_key_configured',False),'dates':[p.stem for p in reversed(paths)]}
+    return {'today':today,'snapshot_date':snap.get('trade_date') if snap else None,'snapshot_count':len(paths),'forecast_count':len(list((state.RUNTIME/'forecasts').glob('*.json'))),'indices':snap.get('indices',[]) if snap else [],'breadth':snap.get('breadth',{}) if snap else {},'quality_status':snap.get('quality_status') if snap else None,'worker_online':worker,'calendar_year':calendar['year'],'missing_dates':missing,'summary':state.read(state.RUNTIME/'evaluations/summary.json',{}),'analysis_engine':engine_settings['analysis_engine'],'codex_status':codex_status,'model_configured':codex_status['ready'] if engine_settings['analysis_engine']=='codex_cli' else engine_settings.get('api_key_configured',False),'dates':[p.stem for p in reversed(paths)]}
 @app.get('/api/datasets',dependencies=[Depends(require_session)])
 def datasets():
     paths=sorted((state.RUNTIME/'snapshots').glob('*.json'));snap=state.read(paths[-1]) if paths else None

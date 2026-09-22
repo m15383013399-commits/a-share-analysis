@@ -37,6 +37,16 @@ class PlatformTest(unittest.TestCase):
         self.assertEqual(state.task(task)['status'],'succeeded')
         self.assertEqual(list((state.RUNTIME/'forecasts').glob('*')),[])
         self.assertEqual(len(self.client.get('/api/reports').json()),1)
+    def test_codex_requires_ready_host_but_not_platform_api_key(self):
+        self.login();state.update_settings({'analysis_engine':'codex_cli'})
+        with patch('backend.codex_bridge.status',return_value={'online':False,'ready':False,'message':'本机服务离线'}):
+            self.assertEqual(self.client.post('/api/tasks',json={'kind':'research'}).status_code,409)
+        with patch('backend.codex_bridge.status',return_value={'online':True,'ready':True,'message':'ready'}):
+            response=self.client.post('/api/tasks',json={'kind':'enginecheck'})
+            self.assertEqual(response.status_code,200)
+            self.assertEqual(state.task(response.json()['id'])['kind'],'enginecheck')
+        self.assertFalse(state.settings(public=True)['api_key_configured'])
+
     def test_queue_deduplicates_and_cancelled_is_not_claimed(self):
         self.login()
         one=self.client.post('/api/tasks',json={'kind':'demo'}).json()['id']
